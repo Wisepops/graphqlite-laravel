@@ -104,54 +104,54 @@ class PaginatorTypeMapper implements TypeMapperInterface
                         'firstItem' => [
                             'type' => Type::int(),
                             'description' => 'Get the "index" of the first item being paginated.',
-                            'resolve' => static function (Paginator $root): int {
+                            'resolve' => static function (Paginator $root): ?int {
                                 return $root->firstItem();
                             },
                         ],
                         'lastItem' => [
                             'type' => Type::int(),
                             'description' => 'Get the "index" of the last item being paginated.',
-                            'resolve' => static function (Paginator $root): int {
+                            'resolve' => static function (Paginator $root): ?int {
                                 return $root->lastItem();
                             },
                         ],
                         'hasMorePages' => [
-                            'type' => Type::boolean(),
+                            'type' => Type::nonNull(Type::boolean()),
                             'description' => 'Determine if there are more items in the data source.',
                             'resolve' => static function (Paginator $root): bool {
                                 return $root->hasMorePages();
                             },
                         ],
                         'perPage' => [
-                            'type' => Type::int(),
+                            'type' => Type::nonNull(Type::int()),
                             'description' => 'Get the number of items shown per page.',
                             'resolve' => static function (Paginator $root): int {
                                 return $root->perPage();
                             },
                         ],
                         'hasPages' => [
-                            'type' => Type::boolean(),
+                            'type' => Type::nonNull(Type::boolean()),
                             'description' => 'Determine if there are enough items to split into multiple pages.',
                             'resolve' => static function (Paginator $root): bool {
                                 return $root->hasPages();
                             },
                         ],
                         'currentPage' => [
-                            'type' => Type::int(),
+                            'type' => Type::nonNull(Type::int()),
                             'description' => 'Determine the current page being paginated.',
                             'resolve' => static function (Paginator $root): int {
                                 return $root->currentPage();
                             },
                         ],
                         'isEmpty' => [
-                            'type' => Type::boolean(),
+                            'type' => Type::nonNull(Type::boolean()),
                             'description' => 'Determine if the list of items is empty or not.',
                             'resolve' => static function (Paginator $root): bool {
                                 return $root->isEmpty();
                             },
                         ],
                         'isNotEmpty' => [
-                            'type' => Type::boolean(),
+                            'type' => Type::nonNull(Type::boolean()),
                             'description' => 'Determine if the list of items is not empty.',
                             'resolve' => static function (Paginator $root): bool {
                                 return $root->isNotEmpty();
