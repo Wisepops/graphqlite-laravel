@@ -161,13 +161,13 @@ class PaginatorTypeMapper implements TypeMapperInterface
 
                     if ($countable) {
                         $fields['totalCount'] = [
-                            'type' => Type::int(),
+                            'type' => Type::nonNull(Type::int()),
                             'description' => 'The total count of items.',
                             'resolve' => static function (LengthAwarePaginator $root): int {
                                 return $root->total();
                             }];
                         $fields['lastPage'] = [
-                            'type' => Type::int(),
+                            'type' => Type::nonNull(Type::int()),
                             'description' => 'Get the page number of the last available page.',
                             'resolve' => static function (LengthAwarePaginator $root): int {
                                 return $root->lastPage();
