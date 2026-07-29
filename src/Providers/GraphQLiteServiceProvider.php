@@ -162,10 +162,10 @@ class GraphQLiteServiceProvider extends ServiceProvider
                 $types = [ $types ];
             }
             foreach ($controllers as $namespace) {
-                $service->addControllerNamespace($namespace);
+                $service->addNamespace($namespace);
             }
             foreach ($types as $namespace) {
-                $service->addTypeNamespace($namespace);
+                $service->addNamespace($namespace);
             }
 
             if ($this->app->environment('production')) {
