@@ -15,7 +15,10 @@ use TheCodingMachine\GraphQLite\Http\HttpCodeDeciderInterface;
 use function array_map;
 use function json_decode;
 use function json_last_error;
+use Laminas\Diactoros\Response\EmptyResponse;
+use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Server\RequestHandlerInterface;
 use RuntimeException;
 use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
 use Symfony\Bridge\PsrHttpMessage\HttpMessageFactoryInterface;
@@ -66,8 +69,22 @@ class GraphQLiteController
 
         if (class_exists('\GraphQL\Upload\UploadMiddleware')) {
             // Let's parse the request and adapt it for file uploads.
-            $uploadMiddleware = new UploadMiddleware();
-            $psr7Request = $uploadMiddleware->processRequest($psr7Request);
+            $requestCapture = new class implements RequestHandlerInterface {
+                public ?ServerRequestInterface $request = null;
+
+                public function handle(ServerRequestInterface $request): ResponseInterface
+                {
+                    $this->request = $request;
+
+                    return new EmptyResponse();
+                }
+            };
+            $uploadResponse = (new UploadMiddleware())->process($psr7Request, $requestCapture);
+            if ($requestCapture->request === null) {
+                // The middleware answered on its own, e.g. 413 when the body exceeds post_max_size.
+                return new JsonResponse((string) $uploadResponse->getBody(), $uploadResponse->getStatusCode(), [], true);
+            }
+            $psr7Request = $requestCapture->request;
         }
 
         return $this->handlePsr7Request($psr7Request);
